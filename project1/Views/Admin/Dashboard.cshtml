@@ -1,0 +1,57 @@
+﻿@model project1.Models.User
+
+@{
+    ViewData["Title"] = "ManageProduct";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewData["Customer"] = "Customer";
+    ViewData["Admin"] = "Admin";
+}
+
+<div class="main-panel">
+    <div class="content-wrapper">
+        <h2 style="margin-top:80px;">Manage User</h2>
+        <div class="create_category">
+            <button type="button" style="float:right;margin-bottom:20px" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">Create</button>
+        </div>
+        <form method="post" asp-controller="Admin" asp-action="DeleteUser">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col">User Id</th>
+                        <th scope="col">User Email</th>
+                        <th scope="col">Role</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var item in ViewData["Users"] as List<User>)
+                    {
+                        <tr>
+                            <td>@item.UserId</td>
+                            <td>@item.Email</td>
+                            <td>@{ if (@item.role == 0) {
+                                        @ViewData["Customer"] 
+                            }
+                                else {@ViewData["Admin"]}
+                                    }</td>
+                            <td style="text-align:right">
+                                <input type="hidden" asp-for="UserId" value="@item.UserId" />
+                                <button type="submit" class="btn btn-danger"><i class="fa fa-trash"></i>&nbsp;Delete</button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+
+            </table>
+        </form>
+    </div>
+</div>
+
+@if (ViewBag.Message != null)
+{
+    <script type="text/javascript">
+            window.onload = function () {
+                alert("@ViewBag.Message");
+            };
+    </script>
+}

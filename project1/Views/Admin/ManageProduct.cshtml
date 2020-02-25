@@ -1,0 +1,213 @@
+﻿@model project1.Models.Product
+@{
+    ViewData["Title"] = "ManageProduct";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+    var s = Context.Request.Cookies["UserId"];
+}
+
+<div class="main-panel">
+    <div class="content-wrapper">
+        <h2 style="margin-top:80px;">Manage Product</h2>
+        <div class="create_product">
+            <button type="button" style="float:right;margin-bottom:20px" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">Create</button>
+        </div>
+        <form method="post" asp-controller="Admin" asp-action="DeleteProduct" id="delete_form">
+            <table class="table table-borderless">
+                <thead>
+                    <tr>
+                        <th scope="col">Product Id </th>
+                        <th scope="col">Image</th>
+                        <th scope="col">ProductName</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (var item in ViewData["Products"] as List<Product>)
+                    {
+                        <tr>
+                            <td>@item.ProductId</td>
+                            <td><img src="https://aspnetcorestoragestorage.blob.core.windows.net/zaful-pictures/@item.ImagePath" style="width:150px;height:200px"></td>
+                            <td>@item.ProductName</td>
+                            <td style="text-align:right">
+                                <a class="btn btn-warning" asp-controller="Admin" asp-action="ManageProduct" asp-route-id="@item.ProductId"><i class="fa fa-edit"></i>&nbsp;Edit</a>
+                                <input type="hidden" asp-for="ProductId" value="@item.ProductId" />
+                                <button type="submit" class="btn btn-danger"><i class="fa fa-trash"></i>&nbsp;Delete</button>
+                            </td>
+                        </tr>
+                    }
+
+
+                </tbody>
+            </table>
+        </form>
+    </div>
+</div>
+
+<!-- Modal Create-->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form method="post" asp-controller="Admin" enctype="multipart/form-data" asp-action="ManageProduct">
+                <div class="modal-body">
+
+                    <label asp-for="Image" for="img">Select image:</label>
+                    <input asp-for="Image" type="file" onchange="readURL(this);" accept="image/png, image/jpeg"   />
+                    <img id="blah" src="#" alt="your image" />
+                    <div class="form-group">
+                        <label asp-for="ProductName" for="formGroupExampleInput">Product Name</label>
+                        <input asp-for="ProductName" type="text" class="form-control" id="product_name" placeholder="Product Name" required />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Price" for="formGroupExampleInput2">Price</label>
+                        <input asp-for="Price" type="text" class="form-control" id="price" placeholder="Product Price" required />
+                    </div>
+                    <div class="form-gro">
+                        <label asp-for="Size" class="mr-sm-2" for="inlineFormCustomSelect">Size</label>
+                        <select asp-for="Size" class="custom-select mr-sm-2" id="size">
+                            <option selected>FreeSize</option>
+                            <option value="1">S</option>
+                            <option value="2">M</option>
+                            <option value="3">L</option>
+                            <option value="3">XL</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Stock" for="formGroupExampleInput3">Stock</label>
+                        <input asp-for="Stock" type="text" class="form-control" onkeypress="return event.charCode >= 48 && event.charCode <= 57" id="stock" placeholder="Stock" required />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="CategoryId" class="mr-sm-2" for="inlineFormCustomSelect">Category</label>
+                        <select asp-for="CategoryId" class="custom-select mr-sm-2" id="category">
+                            @foreach (var item in ViewData["Categories"] as List<Category>)
+                            {
+                                <option value="@item.CategoryId">@item.CategoryName</option>
+                            }
+                        </select>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Edit-->
+<div class="modal fade" id="exampleModalCenter1" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Edit Product</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            @{ var product = new Product();
+                if (ViewData["Product"] != null)
+                {
+                    product = ViewData["Product"] as Product;
+                }
+            }
+            <form method="post" enctype="multipart/form-data" asp-controller="Admin" asp-action="EditProduct">
+                <div class="modal-body">
+
+                    <label asp-for="Image" for="img">Select image:</label>
+                    <input asp-for="Image" type="file" onchange="readURL1(this);" accept="image/*" />
+                    <img id="blah1" src="https://aspnetcorestoragestorage.blob.core.windows.net/zaful-pictures/@product.ImagePath" alt="your image" style="width:150px;height:200px;object-fit:cover" />
+                    <div class="form-group">
+                        <label asp-for="ProductName" for="formGroupExampleInput">Product Name</label>
+                        <input asp-for="ProductName" value="@product.ProductName" type="text" class="form-control" id="product_name" placeholder="Product Name">
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Price" for="formGroupExampleInput2">Price</label>
+                        <input asp-for="Price" type="text" value="@product.Price" class="form-control" id="price" placeholder="Product Price">
+                    </div>
+                    <input asp-for="ProductId" type="hidden" value="@product.ProductId" id="product_id">
+                    <input asp-for="ImagePath" type="hidden" value="@product.ImagePath" id="image_path">
+                    <div class="form-group">
+                        <label asp-for="Size" class="mr-sm-2" for="inlineFormCustomSelect">Size</label>
+                        <select asp-for="Size" class="custom-select mr-sm-2" id="size">
+                            <option selected>FreeSize</option>
+                            <option value="1">S</option>
+                            <option value="2">M</option>
+                            <option value="3">L</option>
+                            <option value="3">XL</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Stock" for="formGroupExampleInput3">Stock</label>
+                        <input asp-for="Stock" value="@product.Stock" type="text" class="form-control" onkeypress="return event.charCode >= 48 && event.charCode <= 57" id="stock" placeholder="Stock">
+                    </div>
+                    <p>123</p>
+                    <div class="form-group">
+                        <label asp-for="CategoryId" class="mr-sm-2" for="inlineFormCustomSelect">Category</label>
+                        <select asp-for="CategoryId" class="custom-select mr-sm-2" id="category">
+                            @foreach (var item in ViewData["Categories"] as List<Category>)
+                            {
+                                bool selected = false;
+                                if (@item.CategoryId == @product.CategoryId)
+                                {
+                                    selected = true;
+                                }
+                                else
+                                {
+                                    selected = false;
+                                }
+                                <option value="@item.CategoryId" selected="@selected">@item.CategoryName</option>
+                            }
+                        </select>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script type="text/javascript">
+    $("body").on("submit", "#delete_form", function () {
+        return confirm("Do you want to delete?");
+    });
+</script>
+@if (ViewBag.Message != null)
+{
+    <script type="text/javascript">
+            window.onload = function () {
+                alert("@ViewBag.Message");
+            };
+    </script>
+}
+@if (TempData["message"] != null)
+{
+    <script type="text/javascript">
+            window.onload = function () {
+                alert("@TempData["message"]");
+            };
+    </script>
+}
+
+@if (ViewData["Id"] != null)
+{
+    <script type="text/javascript">
+        window.onload = function () {
+            $('#exampleModalCenter1').modal('show');
+        };
+    </script>
+
+}

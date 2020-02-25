@@ -1,0 +1,100 @@
+﻿@model project1.Models.Category
+
+@{
+    ViewData["Title"] = "ManageProduct";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="main-panel">
+    <div class="content-wrapper">
+        <h2 style="margin-top:80px;">Manage Category</h2>
+        <div class="create_category">
+            <button type="button" style="float:right;margin-bottom:20px" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">Create</button>
+        </div>
+        <form method="post" asp-controller="Admin" asp-action="DeleteCategory">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col">Category Id</th>
+                        <th scope="col">Category Name</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var item in ViewData["Categories"] as List<Category>)
+                    {
+                        <tr>
+                            <td>@item.CategoryId</td>
+                            <td>@item.CategoryName</td>
+                            <td style="text-align:right">
+                                <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#exampleModalCenter1"><i class="fa fa-edit"></i>&nbsp;Edit</button>
+                                <input type="hidden" asp-for="CategoryId" value="@item.CategoryId" />
+                                <button type="submit" class="btn btn-danger"><i class="fa fa-trash"></i>&nbsp;Delete</button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+
+            </table>
+        </form>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form method="post" asp-controller="Admin" asp-action="ManageCategory">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label asp-for="CategoryName" for="formGroupExampleInput">Category Name</label>
+                        <input type="text" asp-for="CategoryName" class="form-control" id="category_name" placeholder="Category Name">
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <input type="submit" value="Submit" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="exampleModalCenter1" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form method="post" asp-controller="Admin" asp-action="ManageCategory">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label asp-for="CategoryName" for="formGroupExampleInput">Category Name</label>
+                        <input type="text" asp-for="CategoryName" class="form-control" id="category_name" placeholder="Category Name">
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <input type="submit" value="Submit" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@if (ViewBag.Message != null)
+{
+    <script type="text/javascript">
+            window.onload = function () {
+                alert("@ViewBag.Message");
+            };
+    </script>
+}

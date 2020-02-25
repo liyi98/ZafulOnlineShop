@@ -1,0 +1,84 @@
+﻿@model project1.Models.Register
+@{
+	ViewData["Title"] = "SignUp";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<section class="bgwhite p-t-66 p-b-60">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-6 p-b-30">
+				<div class="p-r-20 p-r-0-lg">
+					<img src="~/images/wlc.jpg" alt="" style="width:500px;height:300px;object-fit:cover">
+				</div>
+			</div>
+
+			<div class="col-md-6 p-b-30">
+				<form class="leave-comment" method="post" asp-controller="Admin" asp-action="SignUp">
+					<h4 class="m-text26 p-b-36 p-t-15">
+						Sign Up Here
+					</h4>
+
+					<div class="bo4 of-hidden size15 m-b-20">
+						<input class="sizefull s-text7 p-l-22 p-r-22" asp-for="Email" type="text" placeholder="Email" required>
+						<span asp-validation-for="Email" class="text-danger"></span>
+					</div>
+
+					<div class="bo4 of-hidden size15 m-b-20">
+						<input asp-for="Password" class="sizefull s-text7 p-l-22 p-r-22" type="password" placeholder="Password" required>
+						<span asp-validation-for="Password" class="text-danger"></span>
+					</div>
+
+					<div class="bo4 of-hidden size15 m-b-20">
+						<input class="sizefull s-text7 p-l-22 p-r-22" type="password" name="email" placeholder="Confirm Password" required>
+					</div>
+
+
+					<div class="w-size25">
+						<!-- Button -->
+						<button class="flex-c-m size2 bg1 bo-rad-23 hov1 m-text3 trans-0-4" type="submit">
+							Create
+						</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</section>
+@if (ViewBag.Message != null)
+{
+<div class="alert alert-success" role="alert">
+	@ViewBag.Message
+</div>
+}
+<!--<div class="row">
+	<div class="col-md-4">
+		<form  method = "post" asp-controller = "Home" asp-action = "SignUp">
+			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+			<div class="form-group">
+				<label asp-for="Email" class="control-label"></label>
+				<input asp-for="Email" class="form-control" />
+				<span asp-validation-for="Email" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="Password" class="control-label"></label>
+				<input asp-for="Password" class="form-control" type="password" />
+				<span asp-validation-for="Password" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label class="control-label"> ConfirmPassword</label>
+				<input class="form-control" type="password" />
+				<span class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<input type="submit" value="Create" class="btn btn-default" />
+			</div>
+		</form>
+	</div>
+</div>
+	-->
+<div>
+	<a asp-action="Index">Back to List</a>
+</div>
+
